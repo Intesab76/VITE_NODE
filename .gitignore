@@ -1,0 +1,41 @@
+# Top-level node modules (if any)
+node_modules/
+
+# Common environment and logs
+.env
+.env*
+*.env.local
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+
+
+yarn-error.log*
+pnpm-debug.log*
+
+# macOS / Windows system files
+.DS_Store
+Thumbs.db
+
+# VS Code and other IDEs
+.vscode/
+.idea/
+*.swp
+
+# Client (Vite / Frontend)
+intesab-vite-react-app/node_modules/
+intesab-vite-react-app/client/dist/
+intesab-vite-react-app/client/.vite/
+intesab-vite-react-app/client/.env
+
+# Server (Node.js / Backend)
+Backend-server/node_modules/
+Backend-server/dist/
+Backend-server/public/         # If frontend build goes here
+Backend-server/.env
+
+# Optional lock files (if you want to keep consistent versions, don’t ignore)
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
