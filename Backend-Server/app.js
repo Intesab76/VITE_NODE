@@ -8,6 +8,7 @@ const multer = require("multer");
 
 const app = express();
 app.use(
+  // Set up CORS to allow requests from specific origins
   cors({
     origin: function (origin, callback) {
       const allowedOrigins = "https://vite-node.vercel.app";

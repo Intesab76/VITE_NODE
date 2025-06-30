@@ -14,17 +14,18 @@ import Navbar from "./Pages/Navbar";
 import UpdateData from "./Pages/UpdateData";
 import NotFound from "./Pages/NotFound";
 import { useState } from "react";
+// import CloudinaryImgUpload from "./Pages/CloudinaryImgUpload";
 
 function App() {
-  const [theme, setTheme] = useState("Light");
+  // const [theme, setTheme] = useState("Light");
 
-  const themeHandler = () => {
-    if (theme === "Light") {
-      setTheme("Dark");
-    } else {
-      setTheme("Light");
-    }
-  };
+  // const themeHandler = () => {
+  //   if (theme === "Light") {
+  //     setTheme("Dark");
+  //   } else {
+  //     setTheme("Light");
+  //   }
+  // };
 
   return (
     <>

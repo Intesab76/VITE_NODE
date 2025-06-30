@@ -41,7 +41,9 @@ const Login = () => {
       if (!email) {
         navigate("/login");
       }
-      navigate("/otp", { state: { email } });
+      setTimeout(() => {
+        navigate("/otp", { state: { email } });
+      }, 2000);
     }
   };
 

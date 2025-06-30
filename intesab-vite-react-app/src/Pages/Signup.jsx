@@ -12,24 +12,51 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
   const [image, setImage] = useState(null);
+  // const [imageId, setImageId] = useState("");
   const [isLoginDisabled, setIsLoginDisabled] = useState(false);
   const [isSignupDisabled, setIsSignupDisabled] = useState(false);
 
   const handleSignup = async (event) => {
     setIsSignupDisabled(true);
     event.preventDefault();
+
+    if (
+      name === "" ||
+      email === "" ||
+      password === "" ||
+      gender === "" ||
+      image === null ||
+      image === undefined
+    ) {
+      setIsSignupDisabled(false);
+      toast.error("Please fill all the fields.");
+      return;
+    }
+
     const formData = new FormData();
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("password", password);
-    formData.append("gender", gender);
-    formData.append("image", image);
+    if (name) {
+      formData.append("name", name);
+    }
+    if (email) {
+      formData.append("email", email);
+    }
+
+    if (password) {
+      formData.append("password", password);
+    }
+
+    if (gender) {
+      formData.append("gender", gender);
+    }
+    if (image) {
+      formData.append("image", image);
+    }
 
     const data = await axios.post(`${backendURL}/signup`, formData, {
       withCredentials: true,
     });
+    // console.log("Data from Signup API:", data);
 
-    console.log("DATA ", data);
     if (data.data.error) {
       setIsSignupDisabled(false);
       toast.error(data.data.error);
@@ -112,9 +139,9 @@ const Signup = () => {
                 <select
                   value={gender}
                   style={{
-                    width: "360px",
+                    // width: "360px",
                     fontWeight: "500",
-                    marginLeft: "3px",
+                    // marginLeft: "3px",
                     border: "2px solid grey",
                     borderRadius: "10px",
                     height: "35px",

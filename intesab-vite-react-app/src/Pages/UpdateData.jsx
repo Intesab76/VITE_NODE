@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Signup from "./Signup";
+import React, { useRef, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -14,7 +13,7 @@ const UpdateData = () => {
   const [updatedGender, setupdatedGender] = useState("");
   const [updatedImage, setUpdatedImage] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
-
+  const imageRef = useRef();
   const handleUpdatedData = async (event) => {
     setIsDisabled(true);
     event.preventDefault();
@@ -38,10 +37,11 @@ const UpdateData = () => {
       withCredentials: true,
     });
     if (data.data.success) {
-      setIsDisabled(false);
+      imageRef.current
+        ? (setUpdatedImage(null), (imageRef.current.value = ""))
+        : null;
       setUpdatedName("");
       setUpdatedEmail("");
-      setUpdatedImage("");
       setUpdatedPassword("");
       setupdatedGender("");
 
@@ -146,6 +146,7 @@ const UpdateData = () => {
                 type="file"
                 className="form-control w-100"
                 onChange={(e) => setUpdatedImage(e.target.files[0])}
+                ref={imageRef}
                 style={{
                   width: "240px",
                   border: "1px solid black",

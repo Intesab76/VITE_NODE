@@ -38,7 +38,9 @@ const EnterOTP = () => {
       setOtp([""]);
       toast.success(otpData.data.success);
 
-      navigate("/private", { state: { email } });
+      setTimeout(() => {
+        navigate("/private", { state: { email } });
+      }, 2000);
     }
   };
 

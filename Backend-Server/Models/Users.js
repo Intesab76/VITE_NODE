@@ -24,9 +24,17 @@ const UserSchema = new mongoose.Schema(
       enum: ["Male", "Female"],
       required: true,
     },
-    image: {
-      data: Buffer,
-      contentType: String,
+    // image: {
+    //   data: Buffer,
+    //   contentType: String,
+    // },
+    imageUrl: {
+      type: String,
+      required: true,
+    },
+    imageId: {
+      // For cloud storage like Cloudinary (Eg. for Deleting/Overriding the image)
+      type: String,
     },
   },
   {

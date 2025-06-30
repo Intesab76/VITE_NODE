@@ -40,13 +40,13 @@ const PrivateRoute = () => {
 
         if (data.status === 200 && data.data) {
           setShowMessage(data.data.success);
-          setPicture(data.data.image);
+          setPicture(data.data.imageUrl);
           setName(data.data.name);
           setGender(data.data.gender);
           setShowBtn(true);
         } else {
           toast.error(data.data.error);
-          console.log("Cookie Deleted.");
+          // console.log("Cookie Deleted.");
           navigate("/login");
         }
       } catch (error) {

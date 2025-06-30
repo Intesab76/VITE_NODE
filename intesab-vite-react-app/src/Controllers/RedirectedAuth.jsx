@@ -10,7 +10,7 @@ const RedirectedAuth = ({ children }) => {
     axios
       .get(`${backendURL}/private`, { withCredentials: true })
       .then((res) => {
-        if (res.data.name && res.data.image) {
+        if (res.data.name && res.data.imageUrl && res.data.gender) {
           setAuthUser(true);
         } else {
           setAuthUser(false);
