@@ -10,27 +10,10 @@ const privateRoute = require("../Controllers/privateRoute.js");
 const updateData = require("../Controllers/updateData.js");
 const logout = require("../Controllers/logout.js");
 const multer = require("multer");
-// const cloudinaryUpload = require("../Controllers/uploadCloudinary.js");
 const { storage } = require("../Controllers/cloudinaryConfig.js");
 
-// const multerUploadImg = multer({
-//   storage: multer.memoryStorage(), // Use memory storage for multer
-//   limits: { fileSize: 15 * 1024 * 1024 },
-// });
-
-const multerUploadImg = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, "uploads/");
-    },
-    filename: (req, file, cb) => {
-      cb(null, Date.now() + "-" + file.originalname);
-    },
-  }),
-});
-
 // Below --> for cloudinary upload... To update Image after Login.(Exclusive for Image Update Only... not for Signup)
-const multerUpdateImg = multer({
+const multerUploadImg = multer({
   storage: storage,
   limits: { fileSize: 15 * 1024 * 1024 },
 });
@@ -63,7 +46,7 @@ router.get("/private", privateRoute, getPrivateRoute);
 router.put(
   "/update",
   privateRoute,
-  multerUpdateImg.single("image"),
+  multerUploadImg.single("image"),
   updateData
 );
 
