@@ -6,10 +6,13 @@ import { useNavigate } from "react-router-dom";
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const Login = () => {
+  const otpLoginProp = "loginOtp";
+  const otpPurpose = "LoginUser";
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoginDisabled, setIsLoginDisabled] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [isSignupDisabled, setIsSignupDisabled] = useState(false);
 
   const handleLogin = async (event) => {
@@ -27,7 +30,6 @@ const Login = () => {
       toast.error(data.data.error);
       setIsLoginDisabled(false);
     } else {
-      setIsLoginDisabled(false);
       toast.success(data.data.success);
       setEmail("");
       setPassword("");
@@ -38,22 +40,29 @@ const Login = () => {
         },
         { withCredentials: true }
       );
+      setIsLoginDisabled(false);
       if (!email) {
         navigate("/login");
       }
-      setTimeout(() => {
-        navigate("/otp", { state: { email } });
-      }, 2000);
+      // setTimeout(() => {
+      navigate("/otp", { state: { email, otpPurpose, otpLoginProp } });
+      // }, 2000);
     }
   };
 
   const handleSignup = (event) => {
     setIsSignupDisabled(true);
     event.preventDefault();
-    setTimeout(() => {
-      setIsSignupDisabled(false);
-      navigate("/signup");
-    }, 2000);
+    setIsSignupDisabled(false);
+    navigate("/signup");
+  };
+  const handleForgotPassword = (event) => {
+    event.preventDefault();
+    navigate("/forgot-password");
+  };
+  const handlePasswordVisibility = (event) => {
+    event.preventDefault();
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -82,18 +91,31 @@ const Login = () => {
               />
             </div>
 
-            <div className="mb-3">
+            <div className="mb-3 position-relative">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="form-control"
                 id="password"
-                placeholder="Your password"
+                placeholder="**************"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <span
+                className={`bi ${
+                  showPassword ? "bi-eye-slash" : "bi-eye"
+                } position-absolute`}
+                onClick={handlePasswordVisibility}
+                style={{
+                  top: "38px",
+                  right: "10px",
+                  cursor: "pointer",
+                  color: "#6c757d",
+                  zIndex: 2,
+                }}
+              ></span>
             </div>
 
             <button
@@ -103,9 +125,16 @@ const Login = () => {
             >
               Log In
             </button>
+            <a
+              style={{ cursor: "pointer" }}
+              onClick={handleForgotPassword}
+              className="text-decoration-none text-secondary d-block text-end mt-2"
+            >
+              Forgot Password
+            </a>
             <p
               style={{
-                marginTop: "25px",
+                marginTop: "7px",
                 marginBottom: "3px",
                 fontWeight: "700",
               }}

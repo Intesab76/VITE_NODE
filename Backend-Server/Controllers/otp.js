@@ -3,31 +3,21 @@ const sendOtp = require("./otpSender");
 const otpModel = require("../Models/OtpModels");
 const users = require("../Models/Users");
 
-const otp = async (req, res, next) => {
+const otp = async (email) => {
   try {
-    const { email } = req.body;
-    if (!email) {
-      console.log("No email found");
-      return res.json({ error: "Email Not Found" });
-    }
+    console.log("OTP Function Called with Email:", email);
     const user = await users.findOne({ email });
-
-    if (!user) {
-      return res.json({ error: "Email not found" });
-    } else {
-      const otp = generateOtp();
-      const otpModal = await otpModel.findOne({ email });
-      if (otpModal) {
-        return res.json({
-          error: "OTP already exists.",
-        });
-      }
-      const otpCrt = await otpModel.create({ email, userId: user._id, otp });
-
-      console.log("OTP AND EMAIL SENT TO NODEMAILER:: ", otp, email);
-      const otpSent = await sendOtp(email, otp);
-      return res.json({ success: "OTP SENT SUCCESSFULLY" });
+    const otp = generateOtp();
+    const otpModal = await otpModel.findOne({ email });
+    if (otpModal) {
+      return { error: "OTP already exists for this email." };
     }
+    const otpCrt = await otpModel.create({ email, userId: user._id, otp });
+
+    console.log("OTP AND EMAIL SENT TO NODEMAILER:: ", otp, email);
+    const otpSent = await sendOtp(email, otp);
+
+    return;
   } catch (error) {
     console.error("Error creating user:", error.message);
     if (error.name === "ValidationError") {
@@ -35,7 +25,10 @@ const otp = async (req, res, next) => {
     } else if (error.code === 11000) {
       console.error("Duplicate key error:", error.keyValue);
     }
-    res.json({ error: "Error while Sending OTP" });
+    return {
+      error:
+        "An error occurred while processing your request. Please try again later.",
+    };
   }
 };
 

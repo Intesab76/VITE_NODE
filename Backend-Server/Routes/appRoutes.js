@@ -11,6 +11,9 @@ const updateData = require("../Controllers/updateData.js");
 const logout = require("../Controllers/logout.js");
 const multer = require("multer");
 const { storage } = require("../Controllers/cloudinaryConfig.js");
+const loginOtp = require("../Controllers/loginOtp.js");
+const forgotPasswordOtp = require("../Controllers/forgotPasswordOtp.js");
+const resetPassword = require("../Controllers/resetPassword.js");
 
 // Below --> for cloudinary upload... To update Image after Login.(Exclusive for Image Update Only... not for Signup)
 const multerUploadImg = multer({
@@ -35,11 +38,9 @@ router.post("/signup", multerUploadImg.single("image"), signup);
 
 router.post("/login", login);
 
-router.post("/send-otp", otp);
+router.post("/send-otp", loginOtp);
 
 router.post("/verify-otp", verifyOtp);
-
-router.post("/logout", logout);
 
 router.get("/private", privateRoute, getPrivateRoute);
 
@@ -49,5 +50,10 @@ router.put(
   multerUploadImg.single("image"),
   updateData
 );
+
+router.post("/logout", logout);
+
+router.post("/forgot-password", forgotPasswordOtp);
+router.post("/reset-password", resetPassword);
 
 module.exports = router;

@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 
 const login = async (req, res) => {
   const { email, password } = req.body;
+
   const user = await users.findOne({ email });
 
   if (!email || !password) {

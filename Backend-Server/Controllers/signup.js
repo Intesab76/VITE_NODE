@@ -6,33 +6,18 @@ const { storage, cloudinary } = require("../Controllers/cloudinaryConfig.js");
 const signup = async (req, res) => {
   const { name, email, password, gender } = req.body;
   const user = await users.findOne({ email });
-  console.log("Image URL :: ", req.file?.path);
-  console.log("IMAGE ID ::", req.file?.filename);
 
   const checkPasswordStrength =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])[A-Za-z\d!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]{8,}$/;
   // At least 8 characters, one uppercase, one lowercase, one number, and one special character
-  // console.log(
-  //   "TEST PASSWORD STRENGTH :: ",
-  //   checkPasswordStrength.test(password)
-  // );
 
   if (!name || !email || !password || !gender || !req.file) {
     return res.json({
-      error: "All fields are Mandatory",
+      error: "All fields are mandatory",
     });
   }
 
   if (!checkPasswordStrength.test(password)) {
-    if (req.file) {
-      // If the password validation fails, delete the uploaded file
-      fs.unlink(req.file?.path || "", (err) => {
-        if (err) {
-          console.error("Error deleting file:", err);
-        }
-      }); // Delete the uploaded file if password validation fails
-      console.log("Password validation failed. File deleted.");
-    }
     return res.json({
       error:
         "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, and one number.",
@@ -53,11 +38,7 @@ const signup = async (req, res) => {
   }
   if (user) {
     // If user already exists, delete the uploaded file
-    fs.unlink(req.file?.path || "", (err) => {
-      if (err) {
-        console.error("Error deleting file:", err);
-      }
-    });
+
     return res.json({
       error: "Email Already Exists. Please Login",
     });
@@ -78,11 +59,6 @@ const signup = async (req, res) => {
     //   }
     // : undefined,
   });
-  fs.unlink(req.file?.path, (err) => {
-    if (err) {
-      console.error("Error deleting file:", err);
-    }
-  }); // Delete the uploaded file after saving to the database
   // console.log("pushed data signup :: ", pushDataInDB);
   return res.json({ success: "Registered Successfully." });
 };

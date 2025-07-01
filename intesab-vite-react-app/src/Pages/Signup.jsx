@@ -12,6 +12,8 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [gender, setGender] = useState("");
   const [image, setImage] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+  // const [imageUrl, setImageUrl] = useState("");
   // const [imageId, setImageId] = useState("");
   const [isLoginDisabled, setIsLoginDisabled] = useState(false);
   const [isSignupDisabled, setIsSignupDisabled] = useState(false);
@@ -19,19 +21,6 @@ const Signup = () => {
   const handleSignup = async (event) => {
     setIsSignupDisabled(true);
     event.preventDefault();
-
-    if (
-      name === "" ||
-      email === "" ||
-      password === "" ||
-      gender === "" ||
-      image === null ||
-      image === undefined
-    ) {
-      setIsSignupDisabled(false);
-      toast.error("Please fill all the fields.");
-      return;
-    }
 
     const formData = new FormData();
     if (name) {
@@ -55,7 +44,6 @@ const Signup = () => {
     const data = await axios.post(`${backendURL}/signup`, formData, {
       withCredentials: true,
     });
-    // console.log("Data from Signup API:", data);
 
     if (data.data.error) {
       setIsSignupDisabled(false);
@@ -77,10 +65,11 @@ const Signup = () => {
   const handleLoginBtn = (event) => {
     setIsLoginDisabled(true);
     event.preventDefault();
-    setTimeout(() => {
-      setIsLoginDisabled(false);
-      navigate("/login");
-    }, 2000);
+    setIsLoginDisabled(false);
+    navigate("/login");
+  };
+  const handlepasswordVisibility = (event) => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -91,7 +80,7 @@ const Signup = () => {
       >
         <div
           className="card p-3 shadow-lg"
-          style={{ width: "100%", maxWidth: "400px" }}
+          style={{ width: "100%", maxWidth: "400px", marginTop: "50px" }}
         >
           <h4 className="text-center mb-2">Sign Up</h4>
           <form onSubmit={handleSignup}>
@@ -121,18 +110,31 @@ const Signup = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="mb-3">
+            <div className="mb-3 position-relative">
               <label htmlFor="password" className="form-label">
                 Password
               </label>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="form-control"
                 id="password"
                 placeholder="**************"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
+              <span
+                className={`bi ${
+                  showPassword ? "bi-eye-slash" : "bi-eye"
+                } position-absolute`}
+                onClick={handlepasswordVisibility}
+                style={{
+                  top: "38px",
+                  right: "10px",
+                  cursor: "pointer",
+                  color: "#6c757d",
+                  zIndex: 2,
+                }}
+              ></span>
             </div>
             <div className="mb-3">
               <label className="mb-2 my-2">

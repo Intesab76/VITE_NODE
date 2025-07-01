@@ -56,6 +56,7 @@ const UpdateData = () => {
   };
 
   const handleBackBtn = () => {
+    setIsDisabled(true);
     navigate("/private");
   };
 
@@ -76,6 +77,7 @@ const UpdateData = () => {
             fontWeight: "500",
           }}
           onClick={handleBackBtn}
+          disabled={isDisabled}
         >
           Back
         </button>

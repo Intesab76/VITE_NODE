@@ -11,6 +11,7 @@ app.use(
   // Set up CORS to allow requests from specific origins
   cors({
     origin: function (origin, callback) {
+      // const allowedOrigins = "http://localhost:5173";
       const allowedOrigins = "https://vite-node.vercel.app";
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);

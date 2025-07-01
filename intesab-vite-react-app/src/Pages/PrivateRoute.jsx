@@ -94,6 +94,7 @@ const PrivateRoute = () => {
           marginTop: "30px",
           fontWeight: "800",
           color: "#A52A2A",
+          backgroundColor: "#FFEAD8",
         }}
       >
         Name : {name}
@@ -104,11 +105,11 @@ const PrivateRoute = () => {
           fontWeight: "900",
           fontSize: "23px",
           color: "#A52A2A",
+          backgroundColor: "lightBlue",
         }}
       >
         Gender : {gender}
       </p>
-
       {picture ? (
         <img
           src={picture}
@@ -136,8 +137,9 @@ const PrivateRoute = () => {
           style={{
             margin: "auto",
             border: "2px solid grey",
-            // borderRadius:
-            backgroundColor: "#FFEAD8",
+            borderRadius: "30px",
+            backgroundColor: "#00809D",
+            color: "#FCECDD",
             display: "flex",
             justifyContent: "center",
             marginTop: "-10px",
@@ -148,7 +150,12 @@ const PrivateRoute = () => {
           }}
           onClick={handleUpdateData}
         >
-          <i className="bi bi-pencil me-2">Edit the Data</i>
+          <i
+            className="bi bi-pencil me-2"
+            style={{ fontSize: "20px", fontWeight: "700" }}
+          >
+            Edit the Data
+          </i>
         </button>
       ) : (
         ""
@@ -156,13 +163,19 @@ const PrivateRoute = () => {
 
       {showBtn ? (
         <button
-          className="btn btn-danger my-1"
+          className="btn my-1"
           // disabled
           onClick={handleSignOut}
           style={{
             margin: "auto",
             display: "flex",
             justifyContent: "center",
+            border: "2px solid grey",
+            backgroundColor: "#F8F8E1",
+            color: "#212121",
+            borderRadius: "30px",
+            fontSize: "20px",
+            fontWeight: "700",
             marginTop: "20px",
             width: "450px",
           }}

@@ -5,18 +5,19 @@ import toast from "react-hot-toast";
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
-const AuthRequired = ({ children }) => {
+const AuthRequired = ({ children, prop }) => {
+  console.log("Prop", prop);
   const navigate = useNavigate();
-  // console.log("Authorised User");
   const [authenticated, setAuthenticated] = useState(null);
 
   useEffect(() => {
     const getData = async () => {
       try {
         const data = await axios.get(`${backendURL}/private`, {
+          params: { prop }, // for private or update route
+
           withCredentials: true,
         });
-        // console.log("DATA FROM AUTH PAGE:: ", data);
         if (data.data.error) {
           toast.error(data.data.error);
           setTimeout(() => {

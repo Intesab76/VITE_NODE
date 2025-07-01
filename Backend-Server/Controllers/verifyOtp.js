@@ -5,9 +5,13 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
 const verifyOtp = async (req, res, next) => {
-  const { email, otp } = req.body;
+  const { email, otp, otpPurpose } = req.body;
 
   try {
+    if (!otp) {
+      return res.json({ error: "Please Enter the OTP" });
+    }
+    // console.log("DATA TYPE OF OTP :: ", otp);
     const user = await users.findOne({ email });
 
     const otpInDb = await otpModel.findOne({ userId: user._id });
@@ -21,10 +25,17 @@ const verifyOtp = async (req, res, next) => {
     if (!isOtpMatched) {
       return res.json({ error: "Incorrect OTP. Did not Match." });
     }
+
+    if (otpPurpose === "ForgotPassword") {
+      await otpModel.deleteOne({ userId: user._id });
+
+      return res.json({
+        success: "OTP verified successfully. Reset your password now.",
+      });
+    }
     const token = jwt.sign({ id: user._id }, process.env.JSON_SECRET_KEY, {
       expiresIn: "1h",
     });
-    console.log("INSIDE VERIFY OTP..");
 
     res.cookie("token", token, {
       httpOnly: true,
@@ -37,7 +48,7 @@ const verifyOtp = async (req, res, next) => {
     return res.json({ success: "OTP verified successfully..." });
   } catch (error) {
     console.log(error.message);
-    res.json({ error: "OTP verification failed." });
+    return res.json({ error: "OTP verification failed." });
   }
 };
 

@@ -14,6 +14,8 @@ import Navbar from "./Pages/Navbar";
 import UpdateData from "./Pages/UpdateData";
 import NotFound from "./Pages/NotFound";
 import { useState } from "react";
+import ForgotPassword from "./Pages/ForgotPassword";
+import ResetPassword from "./Pages/ResetPassword";
 // import CloudinaryImgUpload from "./Pages/CloudinaryImgUpload";
 
 function App() {
@@ -52,7 +54,7 @@ function App() {
         <Route
           path="/private"
           element={
-            <AuthRequired>
+            <AuthRequired prop="private">
               <PrivateRoute />
             </AuthRequired>
           }
@@ -60,12 +62,14 @@ function App() {
         <Route
           path="/update"
           element={
-            <AuthRequired>
+            <AuthRequired prop="update">
               <UpdateData />
             </AuthRequired>
           }
         />
         <Route path="/" element={<Dashboard />}></Route>
+        <Route path="/reset-password" element={<ResetPassword />}></Route>
+        <Route path="/forgot-password" element={<ForgotPassword />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </>

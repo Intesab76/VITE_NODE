@@ -7,12 +7,13 @@ const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const EnterOTP = () => {
   const location = useLocation();
+  const otpPurpose = location.state?.otpPurpose;
   const inputRef = useRef([]);
   const email = location.state?.email;
   const navigate = useNavigate();
   const [otpDisabled, setOtpDisabled] = useState(false);
-  // const [isResendOtpDisabled, setIsResendOtpDisabled] = useState(false);
-
+  const [resentOtpDisabled, setResendOtpDisabled] = useState(false);
+  const [otpBoxDisabled, setOtpBoxDisabled] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
 
   useEffect(() => {
@@ -21,26 +22,47 @@ const EnterOTP = () => {
 
   const handleOTP = async (event) => {
     setOtpDisabled(true);
+    setOtpBoxDisabled(true);
     event.preventDefault();
     const otpData = await axios.post(
       `${backendURL}/verify-otp`,
       {
         otp: otp.join(""),
         email,
+        otpPurpose,
       },
       { withCredentials: true }
     );
     if (otpData.data.error) {
       setOtpDisabled(false);
       toast.error(otpData.data.error);
-    } else {
+      setOtpBoxDisabled(false);
+    }
+    if (otpData.data.success && otpPurpose === "LoginUser" && email) {
       setOtpDisabled(false);
-      setOtp([""]);
+      // setOtp([""]);
       toast.success(otpData.data.success);
 
       setTimeout(() => {
         navigate("/private", { state: { email } });
-      }, 2000);
+      }, 1000);
+    } else if (
+      otpData.data.success &&
+      otpPurpose === "ForgotPassword" &&
+      email
+    ) {
+      setOtpDisabled(false);
+      // setOtp([""]);
+      toast.success(otpData.data.success);
+
+      setTimeout(() => {
+        navigate("/reset-password", {
+          state: { email, otpPurpose },
+        });
+      }, 1000);
+    } else {
+      setOtpDisabled(false);
+      // toast.error("Something went wrong. Please try again.");
     }
   };
 
@@ -64,20 +86,19 @@ const EnterOTP = () => {
   };
 
   const handleOtpSending = async (event) => {
-    setOtpDisabled(true);
+    setResendOtpDisabled(true);
     event.preventDefault();
     const otpData = await axios.post(
       `${backendURL}/send-otp`,
       { email },
       { withCredentials: true }
     );
-    // console.log(otpData.data);
     if (otpData.data.error) {
-      setOtpDisabled(true);
+      setResendOtpDisabled(true);
       toast.error(otpData.data.error + ". Try Login Again.");
-      setOtpDisabled(false);
+      setResendOtpDisabled(false);
     } else {
-      setOtpDisabled(false);
+      setResendOtpDisabled(true);
       toast.success(otpData.data.success);
     }
   };
@@ -118,6 +139,7 @@ const EnterOTP = () => {
                     border: "2px solid grey",
                     backgroundColor: "#FEF8DD",
                   }}
+                  disabled={otpBoxDisabled}
                   value={otpVal}
                   onChange={(event) => {
                     handleOtpChange(event, idx);
@@ -140,9 +162,9 @@ const EnterOTP = () => {
               <button
                 className="btn btn-dark btn-lg"
                 onClick={handleOtpSending}
-                disabled={otpDisabled}
+                disabled={resentOtpDisabled}
               >
-                Send OTP
+                Send OTP Again
               </button>
             </div>
           </div>
